@@ -1,10 +1,10 @@
 import Express from "express";
 
 const app = Express();
-const port = 3000;
+const port = 8080;
 
-app.get("/", (req, res) => {
-  res.send("Hello From Express and Typescirpt");
+app.get("/status", (req, res) => {
+  res.send("Hello from Rookies").status(200);
 });
 
 app.listen(port, () => {
