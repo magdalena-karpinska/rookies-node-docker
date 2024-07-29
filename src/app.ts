@@ -1,5 +1,4 @@
-import Express, { Request, Response } from "express";
-import { v4 as uuidv4 } from "uuid";
+import express, { Request, Response } from "express";
 import { z } from "zod";
 
 const PayloadSchema = z.object({
@@ -12,11 +11,12 @@ type PaymentPayload = {
   amount: number;
 };
 
-const app = Express();
+const app = express();
 const port = 8080;
+app.use(express.json());
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello from").status(200);
+  res.send("Hello from Index").status(200);
 });
 
 app.get("/status", (req: Request, res: Response) => {
@@ -31,7 +31,7 @@ app.post("/payments", (req: Request, res: Response) => {
   if (!carId || !amount) {
     res.status(400).send("Invalid request");
   }
-  res.status(200).send("Payment success");
+  res.status(200).json("Payment success");
 });
 
 app.listen(port, () => {
