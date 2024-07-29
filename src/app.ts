@@ -16,7 +16,7 @@ const app = Express();
 const port = 8080;
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello from Index").status(200);
+  res.send("Hello from").status(200);
 });
 
 app.get("/status", (req: Request, res: Response) => {
