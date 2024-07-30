@@ -29,7 +29,6 @@ app.post('/payments', (req: Request, res: Response) => {
       message: 'Invalid amount. It must be an integer.',
       level: 'error',
     });
-    throw new Error();
   }
 
   res.status(200).json('Payment success');
