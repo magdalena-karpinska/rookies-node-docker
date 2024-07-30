@@ -15,7 +15,7 @@ async function startServer() {
     app.use(mw);
 
     app.get("/", (req: Request, res: Response) => {
-      res.status(200).send("Hello from Index");
+      res.status(200).send("Hello from Index1");
       logger.info("Visited index page");
     });
 
