@@ -20,10 +20,14 @@ app.post('/payments', (req, res) => {
     const { carId, amount } = req.body;
     console.log(carId);
     console.log(amount);
-    logger_1.logger.log({
-        message: 'Invalid amount. It must be an integer.',
-        level: 'error',
-    });
+    const random = Math.random();
+    if (random > 0.5) {
+        logger_1.logger.log({
+            message: 'Invalid amount. It must be an integer.',
+            level: 'error',
+        });
+        throw new Error();
+    }
     res.status(200).json('Payment success');
     logger_1.logger.info({
         level: 'info',
