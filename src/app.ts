@@ -22,6 +22,16 @@ app.post('/payments', (req: Request, res: Response) => {
   console.log(carId);
   console.log(amount);
 
+  if (typeof amount !== 'number' || !Number.isInteger(amount)) {
+    logger.log({
+      message: 'Invalid amount. It must be an integer.',
+      level: 'error',
+    });
+    return res
+      .status(400)
+      .json({ error: 'Invalid amount. It must be an integer.' });
+  }
+
   const random = Math.random();
 
   if (random > 0.5) {
