@@ -23,7 +23,7 @@ app.post('/payments', (req, res) => {
     const random = Math.random();
     if (random > 0.5) {
         logger_1.logger.log({
-            message: 'Invalid amount. It must be an integer.',
+            message: 'Invalid random. It must be less than 0.5.',
             level: 'error',
         });
     }
