@@ -23,7 +23,6 @@ function startServer() {
             const app = (0, express_1.default)();
             const port = 8080;
             app.use(express_1.default.json());
-            // Use the Bunyan middleware
             app.use(mw);
             app.get("/", (req, res) => {
                 res.status(200).send("Hello from Index1");

@@ -11,7 +11,6 @@ async function startServer() {
     const port = 8080;
     app.use(express.json());
 
-    // Use the Bunyan middleware
     app.use(mw);
 
     app.get("/", (req: Request, res: Response) => {
