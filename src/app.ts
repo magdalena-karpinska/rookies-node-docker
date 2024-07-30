@@ -1,11 +1,6 @@
 import express, { Request, Response } from "express";
 import lb from "@google-cloud/logging-bunyan";
 
-type PaymentPayload = {
-  carId: string;
-  amount: number;
-};
-
 async function startServer() {
   try {
     const { logger, mw } = await lb.express.middleware({
@@ -29,9 +24,11 @@ async function startServer() {
     });
 
     app.post("/payments", (req: Request, res: Response) => {
-      const { carId, amount } = req.body as PaymentPayload;
+      const { carId, amount } = req.body;
+      console.log(carId);
+      console.log(amount);
 
-      logger.info(`Payment received: carId=${carId}, amount=${amount}`);
+      logger.info("Payment received:");
       res.status(200).json("Payment success");
     });
 
