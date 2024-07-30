@@ -1,11 +1,5 @@
 import express, { Request, Response } from "express";
-import { z } from "zod";
 import lb from "@google-cloud/logging-bunyan";
-
-const PayloadSchema = z.object({
-  carId: z.string().uuid(),
-  amount: z.number().int(),
-});
 
 type PaymentPayload = {
   carId: string;
@@ -13,34 +7,41 @@ type PaymentPayload = {
 };
 
 async function startServer() {
-  const { logger, mw } = await lb.express.middleware({
-    logName: "samples_express",
-  });
+  try {
+    const { logger, mw } = await lb.express.middleware({
+      logName: "samples_express",
+    });
 
-  const app = express();
-  const port = 8080;
-  app.use(express.json());
+    const app = express();
+    const port = 8080;
+    app.use(express.json());
 
-  app.get("/", (req: Request, res: Response) => {
-    res.send("Hello from Index").status(200);
-  });
+    // Use the Bunyan middleware
+    app.use(mw);
 
-  app.get("/status", (req: Request, res: Response) => {
-    res.send("Hello from Rookies").status(200);
-  });
+    app.get("/", (req: Request, res: Response) => {
+      res.status(200).send("Hello from Index");
+      logger.info("Visited index page");
+    });
 
-  app.post("/payments", (req: Request, res: Response) => {
-    const result = PayloadSchema.safeParse(req.body);
+    app.get("/status", (req: Request, res: Response) => {
+      res.status(200).send("Hello from Rookies");
+    });
 
-    const { carId, amount } = result.data as PaymentPayload;
+    app.post("/payments", (req: Request, res: Response) => {
+      const { carId, amount } = req.body as PaymentPayload;
 
-    if (!carId || !amount) {
-      res.status(400).send("Invalid request");
-    }
-    res.status(200).json("Payment success");
-  });
+      logger.info(`Payment received: carId=${carId}, amount=${amount}`);
+      res.status(200).json("Payment success");
+    });
 
-  app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
-  });
+    app.listen(port, () => {
+      console.log(`Example app listening at http://localhost:${port}`);
+      logger.info(`Server started at http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.error("Error initializing server:", error);
+  }
 }
+
+startServer();
