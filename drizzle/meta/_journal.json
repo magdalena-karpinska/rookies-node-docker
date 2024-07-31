@@ -8,6 +8,13 @@
       "when": 1722430804105,
       "tag": "0000_worried_venus",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1722434233852,
+      "tag": "0001_solid_nightshade",
+      "breakpoints": true
     }
   ]
 }
