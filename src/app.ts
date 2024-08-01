@@ -26,15 +26,15 @@ app.post("/payments", async (req: Request, res: Response) => {
   console.log(car_id);
   console.log(amount);
 
-  if (typeof amount !== "number" || !Number.isInteger(amount)) {
-    logger.log({
-      message: "Invalid amount. It must be an integer.",
-      level: "error",
-    });
-    return res
-      .status(400)
-      .json({ error: "Invalid amount. It must be an integer." });
-  }
+  // if (typeof amount !== "number" || !Number.isInteger(amount)) {
+  //   logger.log({
+  //     message: "Invalid amount. It must be an integer.",
+  //     level: "error",
+  //   });
+  //   return res
+  //     .status(400)
+  //     .json({ error: "Invalid amount. It must be an integer." });
+  // }
 
   // try {
   //   await db.transaction(async (tx) => {
