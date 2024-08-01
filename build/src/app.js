@@ -45,11 +45,11 @@ app.post("/payments", (req, res) => __awaiter(void 0, void 0, void 0, function* 
             // await postPayments(tx, carId, amount);
             yield tx
                 .insert(schema_1.payments)
-                .values({ carId: carId, amount: amount })
+                .values({ car_id: carId, amount: amount })
                 .returning();
             console.log("run postPayments");
             // await postOutBox(tx, carId);
-            yield tx.insert(schema_1.outBoxTable).values({ carId: carId }).returning();
+            yield tx.insert(schema_1.outBoxTable).values({ car_id: carId }).returning();
             console.log("run postOutBox");
         }));
     }

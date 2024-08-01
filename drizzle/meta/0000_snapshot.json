@@ -1,5 +1,5 @@
 {
-  "id": "8697d477-0ce1-4d69-a3bc-783a39db88fd",
+  "id": "6a40ab1f-06f5-4694-aa3a-9e45848ec4c2",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -14,9 +14,9 @@
           "primaryKey": true,
           "notNull": true
         },
-        "statusText": {
-          "name": "statusText",
-          "type": "text",
+        "car_id": {
+          "name": "car_id",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         }
@@ -36,8 +36,8 @@
           "primaryKey": true,
           "notNull": true
         },
-        "carId": {
-          "name": "carId",
+        "car_id": {
+          "name": "car_id",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true

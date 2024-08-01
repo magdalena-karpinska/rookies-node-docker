@@ -41,11 +41,11 @@ app.post("/payments", async (req: Request, res: Response) => {
       // await postPayments(tx, carId, amount);
       await tx
         .insert(payments)
-        .values({ carId: carId, amount: amount })
+        .values({ car_id: carId, amount: amount })
         .returning();
       console.log("run postPayments");
       // await postOutBox(tx, carId);
-      await tx.insert(outBoxTable).values({ carId: carId }).returning();
+      await tx.insert(outBoxTable).values({ car_id: carId }).returning();
       console.log("run postOutBox");
     });
   } catch (error) {

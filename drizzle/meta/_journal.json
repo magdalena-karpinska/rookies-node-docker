@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1722498287109,
-      "tag": "0000_steady_thunderbolt",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1722498512221,
-      "tag": "0001_light_golden_guardian",
+      "when": 1722503166914,
+      "tag": "0000_equal_triathlon",
       "breakpoints": true
     }
   ]
