@@ -2,7 +2,10 @@ import { db } from "./db";
 import { outBoxTable, payments } from "./db/schema";
 
 export const postPayments = async (tx: any, carId: string, amount: number) => {
-  await tx.insert(payments).values({ carId: carId, amount: amount });
+  await tx
+    .insert(payments)
+    .values({ carId: carId, amount: amount })
+    .returning();
 };
 
 export const postOutBox = async (tx: any, carId: string) => {

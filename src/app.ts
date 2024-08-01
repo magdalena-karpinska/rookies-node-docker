@@ -3,6 +3,7 @@ import { logger } from "./logger";
 import { postOutBox, postPayments } from "../server/queries";
 import { db } from "../server/db";
 import { log } from "winston";
+import { outBoxTable, payments } from "../server/db/schema";
 
 const app = express();
 const port = 8080;
@@ -37,9 +38,14 @@ app.post("/payments", async (req: Request, res: Response) => {
 
   try {
     await db.transaction(async (tx) => {
-      await postPayments(tx, carId, amount);
+      // await postPayments(tx, carId, amount);
+      await tx
+        .insert(payments)
+        .values({ carId: carId, amount: amount })
+        .returning();
       console.log("run postPayments");
-      await postOutBox(tx, carId);
+      // await postOutBox(tx, carId);
+      await tx.insert(outBoxTable).values({ carId: carId }).returning();
       console.log("run postOutBox");
     });
   } catch (error) {

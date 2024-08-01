@@ -14,8 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const logger_1 = require("./logger");
-const queries_1 = require("../server/queries");
 const db_1 = require("../server/db");
+const schema_1 = require("../server/db/schema");
 const app = (0, express_1.default)();
 const port = 8080;
 app.use(express_1.default.json());
@@ -42,9 +42,14 @@ app.post("/payments", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     try {
         yield db_1.db.transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
-            yield (0, queries_1.postPayments)(tx, carId, amount);
+            // await postPayments(tx, carId, amount);
+            yield tx
+                .insert(schema_1.payments)
+                .values({ carId: carId, amount: amount })
+                .returning();
             console.log("run postPayments");
-            yield (0, queries_1.postOutBox)(tx, carId);
+            // await postOutBox(tx, carId);
+            yield tx.insert(schema_1.outBoxTable).values({ carId: carId }).returning();
             console.log("run postOutBox");
         }));
     }

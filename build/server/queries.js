@@ -12,7 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postOutBox = exports.postPayments = void 0;
 const schema_1 = require("./db/schema");
 const postPayments = (tx, carId, amount) => __awaiter(void 0, void 0, void 0, function* () {
-    yield tx.insert(schema_1.payments).values({ carId: carId, amount: amount });
+    yield tx
+        .insert(schema_1.payments)
+        .values({ carId: carId, amount: amount })
+        .returning();
 });
 exports.postPayments = postPayments;
 const postOutBox = (tx, carId) => __awaiter(void 0, void 0, void 0, function* () {
