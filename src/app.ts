@@ -56,11 +56,20 @@ app.post("/payments", async (req: Request, res: Response) => {
   //   });
   //   return res.status(500).json({ error: "Transaction failed" });
   // }
-
-  await db
-    .insert(payments)
-    .values({ car_id: carId, amount: amount })
-    .returning();
+  try {
+    await db
+      .insert(payments)
+      .values({ car_id: carId, amount: amount })
+      .returning();
+  } catch (error) {
+    console.error("Failed data insert:", error);
+    logger.error({
+      message: "Transaction failed",
+      error: error instanceof Error ? error.message : String(error),
+    });
+    throw new Error("Failed data insert");
+    // return res.status(500).json({ error: "Transaction failed" });
+  }
 
   res.status(200).send("Payment success");
   logger.info({

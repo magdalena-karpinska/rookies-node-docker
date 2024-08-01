@@ -60,10 +60,21 @@ app.post("/payments", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     //   });
     //   return res.status(500).json({ error: "Transaction failed" });
     // }
-    yield db_1.db
-        .insert(schema_1.payments)
-        .values({ car_id: carId, amount: amount })
-        .returning();
+    try {
+        yield db_1.db
+            .insert(schema_1.payments)
+            .values({ car_id: carId, amount: amount })
+            .returning();
+    }
+    catch (error) {
+        console.error("Failed data insert:", error);
+        logger_1.logger.error({
+            message: "Transaction failed",
+            error: error instanceof Error ? error.message : String(error),
+        });
+        throw new Error("Failed data insert");
+        // return res.status(500).json({ error: "Transaction failed" });
+    }
     res.status(200).send("Payment success");
     logger_1.logger.info({
         level: "info",

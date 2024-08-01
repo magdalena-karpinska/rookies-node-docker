@@ -1,13 +1,14 @@
-import 'dotenv/config';
+import "dotenv/config";
 
-import { drizzle } from 'drizzle-orm/postgres-js';
-import * as schema from './schema';
-import postgres from 'postgres';
+import { drizzle } from "drizzle-orm/postgres-js";
+import * as schema from "./schema";
+import postgres from "postgres";
 
-const dbUrl = process.env.DB_URL;
+const dbUrl =
+  "postgres://default:Kf6IOi4XHrlP@ep-mute-paper-a2zwoq0u-pooler.eu-central-1.aws.neon.tech:5432/verceldb?sslmode=require";
 
 if (!dbUrl) {
-  throw new Error('Missing DB_URL.');
+  throw new Error("Missing DB_URL.");
 }
 
 const client = postgres(dbUrl);
