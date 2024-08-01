@@ -36,26 +36,31 @@ app.post("/payments", async (req: Request, res: Response) => {
       .json({ error: "Invalid amount. It must be an integer." });
   }
 
-  try {
-    await db.transaction(async (tx) => {
-      // await postPayments(tx, carId, amount);
-      await tx
-        .insert(payments)
-        .values({ car_id: carId, amount: amount })
-        .returning();
-      console.log("run postPayments");
-      // await postOutBox(tx, carId);
-      await tx.insert(outBoxTable).values({ car_id: carId }).returning();
-      console.log("run postOutBox");
-    });
-  } catch (error) {
-    console.error("Transaction failed:", error);
-    logger.error({
-      message: "Transaction failed",
-      error: error instanceof Error ? error.message : String(error),
-    });
-    return res.status(500).json({ error: "Transaction failed" });
-  }
+  // try {
+  //   await db.transaction(async (tx) => {
+  //     // await postPayments(tx, carId, amount);
+  //     await tx
+  //       .insert(payments)
+  //       .values({ car_id: carId, amount: amount })
+  //       .returning();
+  //     console.log("run postPayments");
+  //     // await postOutBox(tx, carId);
+  //     await tx.insert(outBoxTable).values({ car_id: carId }).returning();
+  //     console.log("run postOutBox");
+  //   });
+  // } catch (error) {
+  //   console.error("Transaction failed:", error);
+  //   logger.error({
+  //     message: "Transaction failed",
+  //     error: error instanceof Error ? error.message : String(error),
+  //   });
+  //   return res.status(500).json({ error: "Transaction failed" });
+  // }
+
+  await db
+    .insert(payments)
+    .values({ car_id: carId, amount: amount })
+    .returning();
 
   res.status(200).send("Payment success");
   logger.info({

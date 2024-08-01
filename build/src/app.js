@@ -40,27 +40,30 @@ app.post("/payments", (req, res) => __awaiter(void 0, void 0, void 0, function* 
             .status(400)
             .json({ error: "Invalid amount. It must be an integer." });
     }
-    try {
-        yield db_1.db.transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
-            // await postPayments(tx, carId, amount);
-            yield tx
-                .insert(schema_1.payments)
-                .values({ car_id: carId, amount: amount })
-                .returning();
-            console.log("run postPayments");
-            // await postOutBox(tx, carId);
-            yield tx.insert(schema_1.outBoxTable).values({ car_id: carId }).returning();
-            console.log("run postOutBox");
-        }));
-    }
-    catch (error) {
-        console.error("Transaction failed:", error);
-        logger_1.logger.error({
-            message: "Transaction failed",
-            error: error instanceof Error ? error.message : String(error),
-        });
-        return res.status(500).json({ error: "Transaction failed" });
-    }
+    // try {
+    //   await db.transaction(async (tx) => {
+    //     // await postPayments(tx, carId, amount);
+    //     await tx
+    //       .insert(payments)
+    //       .values({ car_id: carId, amount: amount })
+    //       .returning();
+    //     console.log("run postPayments");
+    //     // await postOutBox(tx, carId);
+    //     await tx.insert(outBoxTable).values({ car_id: carId }).returning();
+    //     console.log("run postOutBox");
+    //   });
+    // } catch (error) {
+    //   console.error("Transaction failed:", error);
+    //   logger.error({
+    //     message: "Transaction failed",
+    //     error: error instanceof Error ? error.message : String(error),
+    //   });
+    //   return res.status(500).json({ error: "Transaction failed" });
+    // }
+    yield db_1.db
+        .insert(schema_1.payments)
+        .values({ car_id: carId, amount: amount })
+        .returning();
     res.status(200).send("Payment success");
     logger_1.logger.info({
         level: "info",
