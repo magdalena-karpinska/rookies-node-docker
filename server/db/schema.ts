@@ -1,12 +1,12 @@
-import { serial, jsonb, pgTable, integer } from 'drizzle-orm/pg-core';
+import { serial, pgTable, integer, varchar, text } from "drizzle-orm/pg-core";
 
-export const outBoxTable = pgTable('outbox', {
-  id: serial('id').primaryKey(),
-  data: jsonb('data').notNull(),
+export const outBoxTable = pgTable("outbox", {
+  id: serial("id").primaryKey(),
+  carId: varchar("carId").notNull(),
 });
 
-export const payments = pgTable('payments', {
-  id: serial('id').primaryKey(),
-  carId: serial('id'),
-  amount: integer('amount'),
+export const payments = pgTable("payments", {
+  id: serial("id").primaryKey(),
+  carId: varchar("carId").notNull(),
+  amount: integer("amount"),
 });
