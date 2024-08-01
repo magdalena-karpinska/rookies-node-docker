@@ -40,10 +40,22 @@ app.post("/payments", (req, res) => __awaiter(void 0, void 0, void 0, function* 
             .status(400)
             .json({ error: "Invalid amount. It must be an integer." });
     }
-    yield db_1.db.transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
-        yield (0, queries_1.postPayments)(tx, carId, amount);
-        yield (0, queries_1.postOutBox)(tx, carId);
-    }));
+    try {
+        yield db_1.db.transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
+            yield (0, queries_1.postPayments)(tx, carId, amount);
+            console.log("run postPayments");
+            yield (0, queries_1.postOutBox)(tx, carId);
+            console.log("run postOutBox");
+        }));
+    }
+    catch (error) {
+        console.error("Transaction failed:", error);
+        logger_1.logger.error({
+            message: "Transaction failed",
+            error: error instanceof Error ? error.message : String(error),
+        });
+        return res.status(500).json({ error: "Transaction failed" });
+    }
     res.status(200).send("Payment success");
     logger_1.logger.info({
         level: "info",

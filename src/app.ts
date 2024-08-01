@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { logger } from "./logger";
 import { postOutBox, postPayments } from "../server/queries";
 import { db } from "../server/db";
+import { log } from "winston";
 
 const app = express();
 const port = 8080;
@@ -34,10 +35,21 @@ app.post("/payments", async (req: Request, res: Response) => {
       .json({ error: "Invalid amount. It must be an integer." });
   }
 
-  await db.transaction(async (tx) => {
-    await postPayments(tx, carId, amount);
-    await postOutBox(tx, carId);
-  });
+  try {
+    await db.transaction(async (tx) => {
+      await postPayments(tx, carId, amount);
+      console.log("run postPayments");
+      await postOutBox(tx, carId);
+      console.log("run postOutBox");
+    });
+  } catch (error) {
+    console.error("Transaction failed:", error);
+    logger.error({
+      message: "Transaction failed",
+      error: error instanceof Error ? error.message : String(error),
+    });
+    return res.status(500).json({ error: "Transaction failed" });
+  }
 
   res.status(200).send("Payment success");
   logger.info({
