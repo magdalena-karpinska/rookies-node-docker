@@ -32,15 +32,18 @@ app.post("/payments", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const { car_id, amount } = req.body;
     console.log(car_id);
     console.log(amount);
-    // if (typeof amount !== "number" || !Number.isInteger(amount)) {
-    //   logger.log({
-    //     message: "Invalid amount. It must be an integer.",
-    //     level: "error",
-    //   });
-    //   return res
-    //     .status(400)
-    //     .json({ error: "Invalid amount. It must be an integer." });
-    // }
+    if (typeof amount !== "number") {
+        logger_1.logger.log({
+            message: "Invalid amount. It must be an integer.",
+            level: "error",
+        });
+        return res
+            .status(400)
+            .json({ error: "Invalid amount. It must be an integer." });
+    }
+    if (!car_id.trim()) {
+        return res.status(400).json({ error: "Car ID is required" });
+    }
     try {
         yield db_1.db.transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
             yield tx
