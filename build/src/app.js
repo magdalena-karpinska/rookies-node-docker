@@ -40,41 +40,41 @@ app.post("/payments", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     //     .status(400)
     //     .json({ error: "Invalid amount. It must be an integer." });
     // }
-    // try {
-    //   await db.transaction(async (tx) => {
-    //     // await postPayments(tx, car_id, amount);
-    //     await tx
-    //       .insert(payments)
-    //       .values({ car_id: car_id, amount: amount })
-    //       .returning();
-    //     console.log("run postPayments");
-    //     // await postOutBox(tx, car_id);
-    //     await tx.insert(outBoxTable).values({ car_id: car_id }).returning();
-    //     console.log("run postOutBox");
-    //   });
-    // } catch (error) {
-    //   console.error("Transaction failed:", error);
-    //   logger.error({
-    //     message: "Transaction failed",
-    //     error: error instanceof Error ? error.message : String(error),
-    //   });
-    //   return res.status(500).json({ error: "Transaction failed" });
-    // }
     try {
-        yield db_1.db
-            .insert(schema_1.payments)
-            .values({ car_id: car_id, amount: amount })
-            .returning();
+        yield db_1.db.transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
+            // await postPayments(tx, car_id, amount);
+            yield tx
+                .insert(schema_1.payments)
+                .values({ car_id: car_id, amount: amount })
+                .returning();
+            console.log("run postPayments");
+            // await postOutBox(tx, car_id);
+            yield tx.insert(schema_1.outBoxTable).values({ car_id: car_id }).returning();
+            console.log("run postOutBox");
+        }));
     }
     catch (error) {
-        console.error("Failed data insert:", error);
+        console.error("Transaction failed:", error);
         logger_1.logger.error({
             message: "Transaction failed",
             error: error instanceof Error ? error.message : String(error),
         });
-        throw new Error("Failed data insert");
-        // return res.status(500).json({ error: "Transaction failed" });
+        return res.status(500).json({ error: "Transaction failed" });
     }
+    // try {
+    //   await db
+    //     .insert(payments)
+    //     .values({ car_id: car_id, amount: amount })
+    //     .returning();
+    // } catch (error) {
+    //   console.error("Failed data insert:", error);
+    //   logger.error({
+    //     message: "Transaction failed",
+    //     error: error instanceof Error ? error.message : String(error),
+    //   });
+    //   throw new Error("Failed data insert");
+    //   // return res.status(500).json({ error: "Transaction failed" });
+    // }
     res.status(200).send("Payment success");
     logger_1.logger.info({
         level: "info",
