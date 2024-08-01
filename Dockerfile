@@ -14,4 +14,4 @@ USER node
 
 EXPOSE 8080
 
-CMD [ "node", "./build/app.js" ]
+CMD [ "node", "./build/src/app.js" ]
