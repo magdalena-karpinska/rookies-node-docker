@@ -28,8 +28,8 @@ app.get("/status", (_req, res) => {
     logger_1.logger.info("Status page!");
 });
 app.post("/payments", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { carId, amount } = req.body;
-    console.log(carId);
+    const { car_id, amount } = req.body;
+    console.log(car_id);
     console.log(amount);
     if (typeof amount !== "number" || !Number.isInteger(amount)) {
         logger_1.logger.log({
@@ -42,14 +42,14 @@ app.post("/payments", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     // try {
     //   await db.transaction(async (tx) => {
-    //     // await postPayments(tx, carId, amount);
+    //     // await postPayments(tx, car_id, amount);
     //     await tx
     //       .insert(payments)
-    //       .values({ car_id: carId, amount: amount })
+    //       .values({ car_id: car_id, amount: amount })
     //       .returning();
     //     console.log("run postPayments");
-    //     // await postOutBox(tx, carId);
-    //     await tx.insert(outBoxTable).values({ car_id: carId }).returning();
+    //     // await postOutBox(tx, car_id);
+    //     await tx.insert(outBoxTable).values({ car_id: car_id }).returning();
     //     console.log("run postOutBox");
     //   });
     // } catch (error) {
@@ -63,7 +63,7 @@ app.post("/payments", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         yield db_1.db
             .insert(schema_1.payments)
-            .values({ car_id: carId, amount: amount })
+            .values({ car_id: car_id, amount: amount })
             .returning();
     }
     catch (error) {
@@ -79,7 +79,7 @@ app.post("/payments", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     logger_1.logger.info({
         level: "info",
         message: "Payment processed successfully",
-        carId,
+        car_id,
         amount,
     });
 }));
