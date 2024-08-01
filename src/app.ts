@@ -4,6 +4,7 @@ import { postOutBox, postPayments } from "../server/queries";
 import { db } from "../server/db";
 import { log } from "winston";
 import { outBoxTable, payments } from "../server/db/schema";
+import { eq } from "drizzle-orm";
 
 const app = express();
 const port = 8080;
@@ -38,15 +39,36 @@ app.post("/payments", async (req: Request, res: Response) => {
 
   try {
     await db.transaction(async (tx) => {
-      // await postPayments(tx, car_id, amount);
       await tx
         .insert(payments)
         .values({ car_id: car_id, amount: amount })
         .returning();
-      console.log("run postPayments");
-      // await postOutBox(tx, car_id);
+
       await tx.insert(outBoxTable).values({ car_id: car_id }).returning();
-      console.log("run postOutBox");
+    });
+
+    const response = await fetch(
+      "https://rookies-warehouse-ynorbbawua-lz.a.run.app/warehouse",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ car_id }),
+      }
+    );
+
+    if (!response.ok) {
+      return res.status(500).json({ error: "Transaction failed" });
+    }
+
+    await db.delete(outBoxTable).where(eq(car_id, car_id)).returning();
+    console.log("Car object deleted from the outBoxTable");
+
+    res.status(200).send("Payment success");
+    logger.info({
+      level: "info",
+      message: "Payment processed successfully",
+      car_id,
+      amount,
     });
   } catch (error) {
     console.error("Transaction failed:", error);
@@ -54,30 +76,7 @@ app.post("/payments", async (req: Request, res: Response) => {
       message: "Transaction failed",
       error: error instanceof Error ? error.message : String(error),
     });
-    return res.status(500).json({ error: "Transaction failed" });
   }
-  // try {
-  //   await db
-  //     .insert(payments)
-  //     .values({ car_id: car_id, amount: amount })
-  //     .returning();
-  // } catch (error) {
-  //   console.error("Failed data insert:", error);
-  //   logger.error({
-  //     message: "Transaction failed",
-  //     error: error instanceof Error ? error.message : String(error),
-  //   });
-  //   throw new Error("Failed data insert");
-  //   // return res.status(500).json({ error: "Transaction failed" });
-  // }
-
-  res.status(200).send("Payment success");
-  logger.info({
-    level: "info",
-    message: "Payment processed successfully",
-    car_id,
-    amount,
-  });
 });
 
 app.listen(port, () => {
