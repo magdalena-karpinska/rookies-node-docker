@@ -49,7 +49,7 @@ app.post("/payments", async (req: Request, res: Response) => {
 
     const randomNumber = Math.random();
     if (randomNumber > 0.5) {
-      throw new Error("Payment failed");
+      console.error("Payment failed");
     }
 
     const response = await fetch(

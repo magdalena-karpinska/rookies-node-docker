@@ -52,7 +52,7 @@ app.post("/payments", (req, res) => __awaiter(void 0, void 0, void 0, function* 
         }));
         const randomNumber = Math.random();
         if (randomNumber > 0.5) {
-            throw new Error("Payment failed");
+            console.error("Payment failed");
         }
         const response = yield fetch("https://rookies-warehouse-ynorbbawua-lz.a.run.app/warehouse", {
             method: "POST",
