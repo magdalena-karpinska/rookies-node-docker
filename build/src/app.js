@@ -53,7 +53,7 @@ app.post("/payments", (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const response = yield fetch("https://rookies-warehouse-ynorbbawua-lz.a.run.app/warehouse", {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status: "sold", car_id }),
+            body: JSON.stringify({ car_id }),
         });
         if (!response.ok) {
             return res.status(500).json({ error: "Transaction failed" });

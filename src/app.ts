@@ -51,7 +51,7 @@ app.post("/payments", async (req: Request, res: Response) => {
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "sold", car_id }),
+        body: JSON.stringify({ car_id }),
       }
     );
 
