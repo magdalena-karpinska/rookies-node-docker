@@ -50,8 +50,12 @@ app.post("/payments", (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 .returning();
             yield tx.insert(schema_1.outBoxTable).values({ car_id: car_id }).returning();
         }));
+        const randomNumber = Math.random();
+        if (randomNumber > 0.5) {
+            throw new Error("Payment failed");
+        }
         const response = yield fetch("https://rookies-warehouse-ynorbbawua-lz.a.run.app/warehouse", {
-            method: "PATCH",
+            method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ car_id }),
         });

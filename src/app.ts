@@ -46,10 +46,16 @@ app.post("/payments", async (req: Request, res: Response) => {
 
       await tx.insert(outBoxTable).values({ car_id: car_id }).returning();
     });
+
+    const randomNumber = Math.random();
+    if (randomNumber > 0.5) {
+      throw new Error("Payment failed");
+    }
+
     const response = await fetch(
       "https://rookies-warehouse-ynorbbawua-lz.a.run.app/warehouse",
       {
-        method: "PATCH",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ car_id }),
       }
