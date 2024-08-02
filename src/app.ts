@@ -1,8 +1,6 @@
 import express, { Request, Response } from "express";
 import { logger } from "./logger";
-import { postOutBox, postPayments } from "../server/queries";
 import { db } from "../server/db";
-import { log } from "winston";
 import { outBoxTable, payments } from "../server/db/schema";
 import { eq } from "drizzle-orm";
 
@@ -24,8 +22,6 @@ app.get("/status", (_req: Request, res: Response) => {
 
 app.post("/payments", async (req: Request, res: Response) => {
   const { car_id, amount } = req.body;
-  console.log(car_id);
-  console.log(amount);
 
   if (typeof amount !== "number") {
     logger.log({
@@ -50,13 +46,12 @@ app.post("/payments", async (req: Request, res: Response) => {
 
       await tx.insert(outBoxTable).values({ car_id: car_id }).returning();
     });
-
     const response = await fetch(
       "https://rookies-warehouse-ynorbbawua-lz.a.run.app/warehouse",
       {
-        method: "POST",
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ car_id }),
+        body: JSON.stringify({ status: "sold", car_id }),
       }
     );
 

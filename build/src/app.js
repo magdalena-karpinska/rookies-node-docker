@@ -30,8 +30,6 @@ app.get("/status", (_req, res) => {
 });
 app.post("/payments", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { car_id, amount } = req.body;
-    console.log(car_id);
-    console.log(amount);
     if (typeof amount !== "number") {
         logger_1.logger.log({
             message: "Invalid amount. It must be an integer.",
@@ -53,9 +51,9 @@ app.post("/payments", (req, res) => __awaiter(void 0, void 0, void 0, function* 
             yield tx.insert(schema_1.outBoxTable).values({ car_id: car_id }).returning();
         }));
         const response = yield fetch("https://rookies-warehouse-ynorbbawua-lz.a.run.app/warehouse", {
-            method: "POST",
+            method: "PATCH",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ car_id }),
+            body: JSON.stringify({ status: "sold", car_id }),
         });
         if (!response.ok) {
             return res.status(500).json({ error: "Transaction failed" });
